@@ -6,16 +6,18 @@ import requests
 PIP_ROOT = '/home/romilly/git/active/logseq-migration/test/data/graphs/pip'
 
 
-def match_from(line):
+def link_from(line):
     if '{{pdf' in line:
         link = re.search(r'https://firebasestorage(.*)\?alt([^\}]*)', line)
     else:
         link = re.search(r'https://firebasestorage(.*)\?alt([^/)]*)', line)
-    return link
+    if link is None:
+        raise ValueError('unexpected format: %s' % line )
+    return link.group(0)
 
 
-def add_url_to_assets(match, asset_dir):
-    get_file_name(match.group(0))
+def add_url_to_assets(link: str, asset_dir):
+    get_file_name(link)
 
 
 def get_file_name(url: str):
@@ -30,10 +32,8 @@ def process(file_path: str, lines: List[Tuple[int, str]], asset_dir: str):
     with open(file_path) as md:
         content = md.readlines()
         for number, line in lines:
-            match = match_from(line)
-            if not match:
-                raise ValueError('unexpected format: %s' % line )
-            new_location = add_url_to_assets(match, asset_dir)
+            link = link_from(line)
+            new_location = add_url_to_assets(link, asset_dir)
             # content[number] = replace_url(url, new_location, content[number])
     with open(file_path,'w') as md:
         md.write(''.join(content))
