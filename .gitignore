@@ -135,5 +135,5 @@ ENV/
 # Rope project settings
 .ropeproject
 
-.idea/
+test/data/generated
 
