@@ -4,7 +4,7 @@
 
 Roam stores the assets (images, pdfs, mp3/4 files etc.) in the cloud.
 
-While `logseq` makes it easy to you to import a roam json export, your _assets_ will remain in the cloud.
+While `logseq` makes it easy for you to import a roam json export, your _assets_ will remain in the cloud.
 
 That worries me, because
 
