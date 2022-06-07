@@ -27,7 +27,7 @@ For now, you'll need to clone the repository locally and run the migration comma
 ```shell
 git clone https://github.com/romilly/logseq-migration.git
 cd logseq-migration/src
-python3 migrate <vault-directory>
+python3 migrater.py <vault-directory>
 ```
 
 You should see a list of the firebase urls and the asset files as they are saved.
