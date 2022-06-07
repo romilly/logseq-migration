@@ -1,6 +1,6 @@
 # logseq-migration
 
-Download and use local copies of assets in logseq after importing a file from roam.
+**Download and use local copies of assets in logseq after importing a file from roam**.
 
 Roam stores the assets (images, pdfs, mp3/4 files etc.) in the cloud.
 
