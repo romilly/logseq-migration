@@ -36,5 +36,6 @@ The code is [idempotent](https://en.wikipedia.org/wiki/Idempotence).
 In other words, if you run it two or more times, 
 nothing _should_ change after the first run.
 
-Let me know how you get on!
+Let me know how you get on, and raise an issue if there are problems.
+I'm @rareblog on Twitter.
 
