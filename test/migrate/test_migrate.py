@@ -1,6 +1,6 @@
 import unittest
 
-from migrate.migrater import link_from, get_file_name
+from migrater import link_from, get_file_name
 from test.migrate.samples import PDF, CRAB, PDF_URL, CRAB_URL
 
 
