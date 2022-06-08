@@ -7,7 +7,7 @@ import requests
 
 def link_from(line):
     if '{{pdf' in line or '{{video' in line:
-        link = re.search(r'https://firebasestorage(.*)\?alt([^\}]*)', line)
+        link = re.search(r'https://firebasestorage(.*)\?alt([^}]*)', line)
     else:
         link = re.search(r'https://firebasestorage(.*)\?alt([^/)]*)', line)
     if link is None:
@@ -51,12 +51,12 @@ def update_markdown_content(asset_dir, file_path, lines, relative_asset_dir):
     return content
 
 
-def migrate(vault_directory):
+def migrate(directory):
     relative_assets_dir = 'assets'
     assets_from_page_dir = os.path.join('..', relative_assets_dir)
-    assets_dir = os.path.join(vault_directory, relative_assets_dir)
+    assets_dir = os.path.join(directory, relative_assets_dir)
     ensure_assets_dir_exists(assets_dir)
-    process_files(assets_dir, assets_from_page_dir, vault_directory)
+    process_files(assets_dir, assets_from_page_dir, directory)
 
 
 def process_files(assets_dir, assets_from_page_dir, vault_directory):
