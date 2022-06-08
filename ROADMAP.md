@@ -2,7 +2,7 @@
 
 The next steps are
 
-1. Invite beta-testers.
+1. Invite _beta-testers_.
 2. Write an end-to-end test.
    1. Create a test graph in roam,
    2. export json,
@@ -13,6 +13,7 @@ The next steps are
       1. creates a test copy.
       2. localizes it using this software and
       3. checks the result
-3. Package the application fopr `PyPi` and update the instructions.
-4. Add type hints and docstring comments to all the code.
-5. Generate documentation for collaborators.
+4. _Find a helpful collaborator_ who can help me set up GitHub actions to automate the tests!
+3. Package the application for `PyPi` and update the instructions.
+5. Add type hints and docstring comments to all the code.
+6. Generate documentation for collaborators.
