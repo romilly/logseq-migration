@@ -92,7 +92,9 @@ cd logseq-migration-master/src
 python3 migrater.py <vault-directory>
 ```
 
-You should see a list of the firebase urls and the asset files as they are saved.
+where <vault-directory> is the directory in which your `logseq` graph lives.
+
+You should see a list of the firebase urls and the asset file names as they are saved.
 
 The code is [idempotent](https://en.wikipedia.org/wiki/Idempotence).
 In other words, if you run it two or more times, nothing _should_ change after the first run.
