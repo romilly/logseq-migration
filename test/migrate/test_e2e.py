@@ -4,7 +4,7 @@ import unittest
 
 from hamcrest import assert_that, contains_string
 
-from migrater import migrate
+from migration.migrater import migrate
 
 IMPORTED_GRAPH_NAME = 'test-vault'
 IMPORTED_VAULT = os.path.join('test/data/test/', IMPORTED_GRAPH_NAME)

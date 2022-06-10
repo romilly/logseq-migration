@@ -18,3 +18,9 @@ I cancelled my roam subscription.
 
 I expanded the [README](../README.md) and added a [Roadmap](../ROADMAP.md)
 
+## Friday 10 June 2022
+
+I added an end-to-end test
+
+
+

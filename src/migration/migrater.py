@@ -85,10 +85,14 @@ def find_asset_references(numbered_lines):
                 number, line in numbered_lines if 'https://firebasestorage' in line)
 
 
-if __name__ == '__main__':
+def main():
     if 2 != len(sys.argv):
-        print('usage python3 run.py <vault-directory')
+        print('usage localise_assets <vault-directory')
         sys.exit(1)
     vault_directory = sys.argv[1]
     print('migrating %s' % vault_directory)
     migrate(vault_directory)
+
+
+if __name__ == '__main__':
+    main()
