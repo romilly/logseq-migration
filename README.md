@@ -55,7 +55,7 @@ run `pip3 install logseq-migration`
 
 run `localise_assets <vault_dir>`
 
-where `vault-directory` is the directory in which your `logseq` graph lives.
+where `vault_dir` is the directory in which your `logseq` graph lives.
 
 You should see a list of the firebase urls and the asset file names as they are saved.
 
