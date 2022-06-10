@@ -31,12 +31,6 @@ You'll find instructions below.
 
 ## Installation
 
-For now, you'll need to 
-1. Install required software,
-2. Download this code as a zip file,
-3. Unzip the file, and
-4. Run the migration command by hand whenver you need to process a newly imported graph.
-
 ### Install required software
 
 #### Python 3
@@ -48,49 +42,18 @@ If you don't already have a suitable copy of Python installed, you'll find insta
 
 #### pip3
 
-
 `pip` is Python's package manager. You'll need `pip3`, the version that supports Python3.
 
 This is normally installed with Python3. If it isn't for some reason you can follow
 [these instructions](https://pip.pypa.io/en/stable/installation/).
 
-#### The `requests` package
+### Install the application
 
-`requests` is a 3rd part library which simplifies downloading data from the web. 
-it is used by the `logseq-migration` application.
-
-To install it, type `pip3 install requests` in a command/terminal window.
-
-### Download the zip file
-
-(If you're a GitHub user, you can _clone_ the repository instead.
-In that case the directory mentioned below will be `logseq-migration`).
-
-In a browser, go to [this page](https://github.com/romilly/logseq-migration).
-
-In the window, click on the green `Code` button.
-
-A dialog box will open.
-
-![Dyalog with download zip option](docs/img/migrator-installation.png)
-
-Click on `Download zip`.
-
-Your browser should download the zip file.
-
-Unzip the file in a directory of your choice.
-
-It will create and fill a sub-directory called `logseq-migrarion-master`
-
-Now, each time you want to localize the assets in a graph that you've just imported from roam,
-follow the steps below to run the application
+run `pip3 install logseq-migration`
 
 ### Run the application
 
-```shell
-cd logseq-migration-master/src
-python3 migrater.py <vault-directory>
-```
+run `localise_assets <vault_dir>`
 
 where `vault-directory` is the directory in which your `logseq` graph lives.
 
