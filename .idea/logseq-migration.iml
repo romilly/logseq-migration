@@ -7,6 +7,8 @@
       <excludeFolder url="file://$MODULE_DIR$/test/data/generated" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/test/data/graphs" />
+      <excludeFolder url="file://$MODULE_DIR$/.pytest_cache/v" />
+      <excludeFolder url="file://$MODULE_DIR$/test/.pytest_cache/v" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.8 (logseq-migration)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
