@@ -87,7 +87,7 @@ def find_asset_references(numbered_lines):
 
 def main():
     if 2 != len(sys.argv):
-        print('usage localise_assets <vault-directory')
+        print('usage localise_assets <vault-directory>')
         sys.exit(1)
     vault_directory = sys.argv[1]
     print('migrating %s' % vault_directory)
