@@ -62,8 +62,8 @@ You should see a list of the firebase urls and the asset file names as they are 
 The code is [idempotent](https://en.wikipedia.org/wiki/Idempotence).
 In other words, if you run it two or more times, nothing _should_ change after the first run.
 
-Let me know how you get on, and please raise an issue if there are problems or you want to
-suggest new features.
+Let me know how you get on, and please raise an issue if there are problems, 
+or you want to suggest new features.
 
 There's a [roadmap](ROADMAP.md) and a [project journal](plan/journal.md). If you're interested in contributing, get in 
 touch.

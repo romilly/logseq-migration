@@ -20,8 +20,9 @@ def add_url_to_assets(link: str, asset_dir, relative_asset_dir):
     file_path = os.path.join(asset_dir, file_name)
     relative_path = os.path.join(relative_asset_dir, file_name)
     if not os.path.exists(file_path):
+        print('downloading %s to %s' % (link, relative_path))
         r = requests.get(link)
-        print('downloaded %s to %s' % (link, relative_path))
+        print('downloaded %s' % link)
         with open(file_path, 'wb') as asset:
             asset.write(r.content)
     return relative_path
@@ -74,7 +75,11 @@ def process_file(assets_dir, assets_from_page_dir, file, subdir):
     if file.endswith('.md'):
         file_path = os.path.join(subdir, file)
         with open(file_path) as md:
-            numbered_lines = enumerate(line for line in md)
+            try:
+                numbered_lines = enumerate(line for line in md)
+            except:
+                print('could not read %s' % file_path)
+                sys.exit(-2)
             lines = find_asset_references(numbered_lines)
         if len(lines) > 0:
             process_assets(file_path, lines, assets_dir, assets_from_page_dir)
