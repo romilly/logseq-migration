@@ -4,6 +4,10 @@ import sys
 from typing import List, Tuple
 import requests
 
+# TODO: Horrid but quick, use a Migrator class and add a Monitor
+
+DEBUG = False
+
 
 def link_from(line):
     if '{{pdf' in line or '{{video' in line:
@@ -43,6 +47,8 @@ def process_assets(file_path: str, lines: List[Tuple[int, str]], asset_dir: str,
 
 
 def update_markdown_content(asset_dir, file_path, lines, relative_asset_dir):
+    if DEBUG:
+        print('updating %s' % file_path)
     with open(file_path) as md:
         content = md.readlines()
         for number, line in lines:
@@ -53,6 +59,8 @@ def update_markdown_content(asset_dir, file_path, lines, relative_asset_dir):
 
 
 def migrate(directory):
+    if DEBUG:
+        print('debug mode')
     relative_assets_dir = 'assets'
     assets_from_page_dir = os.path.join('..', relative_assets_dir)
     assets_dir = os.path.join(directory, relative_assets_dir)
@@ -74,6 +82,8 @@ def ensure_assets_dir_exists(assets_dir):
 def process_file(assets_dir, assets_from_page_dir, file, subdir):
     if file.endswith('.md'):
         file_path = os.path.join(subdir, file)
+        if DEBUG:
+            print('processing %s' % file_path)
         with open(file_path) as md:
             try:
                 numbered_lines = enumerate(line for line in md)
@@ -91,12 +101,22 @@ def find_asset_references(numbered_lines):
 
 
 def main():
-    if 2 != len(sys.argv):
-        print('usage localise_assets <vault-directory>')
-        sys.exit(1)
+    global  DEBUG # TODO: remove
+    nargs = len(sys.argv)
+    if 2 > nargs or 3 < nargs:
+        print_usage()
+    if nargs == 3 and sys.argv[2] != 'debug':
+        print_usage()
     vault_directory = sys.argv[1]
+    if nargs == 3:
+        DEBUG = True
     print('migrating %s' % vault_directory)
     migrate(vault_directory)
+
+
+def print_usage():
+    print('usage localise_assets <vault-directory> [debug]')
+    sys.exit(1)
 
 
 if __name__ == '__main__':

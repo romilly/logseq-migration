@@ -2,7 +2,7 @@ import os
 import shutil
 import unittest
 
-from hamcrest import assert_that, contains_stringmigrater
+from hamcrest import assert_that, contains_string
 
 from logseq.migration.migrater import migrate
 
