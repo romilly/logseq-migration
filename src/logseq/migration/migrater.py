@@ -12,7 +12,7 @@ class DownloadFailedException(Exception):
 
 
 class Migrator:
-    VERSION ='0.1.13'
+    VERSION ='0.2'
 
     def __init__(self, debug_level: int = 0, monitor = None):
         if monitor is None:
