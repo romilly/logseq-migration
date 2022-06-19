@@ -59,8 +59,9 @@ def update_markdown_content(asset_dir, file_path, lines, relative_asset_dir):
 
 
 def migrate(directory):
-    if DEBUG:
-        print('debug mode')
+    print('migrate version 0.1.12')
+    debug = 'On' if DEBUG else 'Off'
+    print('debug mode %s' % debug)
     relative_assets_dir = 'assets'
     assets_from_page_dir = os.path.join('..', relative_assets_dir)
     assets_dir = os.path.join(directory, relative_assets_dir)
@@ -84,7 +85,7 @@ def process_file(assets_dir, assets_from_page_dir, file, subdir):
         file_path = os.path.join(subdir, file)
         if DEBUG:
             print('processing %s' % file_path)
-        with open(file_path) as md:
+        with open(file_path, encoding='utf8') as md:
             try:
                 numbered_lines = enumerate(line for line in md)
             except:
