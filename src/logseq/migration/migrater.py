@@ -14,21 +14,78 @@ class NullMonitor:
 
 
 class Migrator:
-    def __init__(self, monitor: Optional[NullMonitor] = None):
-        if monitor == None:
-            monitor = NullMonitor()
-        self.monitor = monitor
+    def __init__(self, *monitors: NullMonitor):
+        self.monitors = monitors
 
     def migrate(self, directory):
-        self.monitor.print('migrate version 0.1.13')
-        debug = 'On' if DEBUG else 'Off'
-        print('debug mode %s' % debug)
+        self.print('migrate version 0.1.13')
+        self.print('migrating %s' % directory)
         relative_assets_dir = 'assets'
         assets_from_page_dir = os.path.join('..', relative_assets_dir)
         assets_dir = os.path.join(directory, relative_assets_dir)
         ensure_assets_dir_exists(assets_dir)
-        process_files(assets_dir, assets_from_page_dir, directory)
+        self.process_files(assets_dir, assets_from_page_dir, directory)
 
+    def print(self, message: str):
+        for monitor in self.monitors:
+            monitor.print(message)
+
+    def process_files(self, assets_dir, assets_from_page_dir, vault_directory):
+        for subdir, dirs, files in os.walk(vault_directory):
+            for file in files:
+                self.process_file(assets_dir, assets_from_page_dir, file,
+                                  subdir)
+
+    def process_file(self, assets_dir, assets_from_page_dir, file, subdir):
+        if file.endswith('.md'):
+            file_path = os.path.join(subdir, file)
+            self.print('processing %s' % file_path)
+            with open(file_path, encoding='utf8') as md:
+                try:
+                    numbered_lines = enumerate(line for line in md)
+                except:
+                    self.print('could not read %s' % file_path)
+                    sys.exit(-2)
+                lines = find_asset_references(numbered_lines)
+            if len(lines) > 0:
+                self.process_assets(file_path, lines,
+                                    assets_dir,
+                                    assets_from_page_dir)
+
+    def process_assets(self, file_path: str,
+                       lines: List[Tuple[int, str]],
+                       asset_dir: str,
+                       relative_asset_dir: str):
+        content = self.update_markdown_content(asset_dir,
+                                               file_path, lines,
+                                               relative_asset_dir)
+        with open(file_path, 'w') as md:
+            md.write(''.join(content))
+
+    def update_markdown_content(self, asset_dir,
+                                file_path, lines,
+                                relative_asset_dir):
+        self.print('updating %s' % file_path)
+        with open(file_path) as md:
+            content = md.readlines()
+            for number, line in lines:
+                link = link_from(line)
+                new_location = self.add_url_to_assets(link, asset_dir,
+                                                  relative_asset_dir)
+                content[number] = content[number].replace(link, new_location)
+        return content
+
+    def add_url_to_assets(self, link: str, asset_dir, relative_asset_dir):
+        file_name = get_file_name(link)
+        file_path = os.path.join(asset_dir, file_name)
+        relative_path = os.path.join(relative_asset_dir, file_name)
+        if not os.path.exists(file_path):
+            self.print('downloading %s to %s' % (link, relative_path))
+            r = requests.get(link)
+            self.print('downloaded %s' % link)
+            with open(file_path, 'wb') as asset:
+                asset.write(r.content)
+        return relative_path
 
 def link_from(line):
     if '{{pdf' in line or '{{video' in line:
@@ -40,18 +97,6 @@ def link_from(line):
     return link.group(0)
 
 
-def add_url_to_assets(link: str, asset_dir, relative_asset_dir):
-    file_name = get_file_name(link)
-    file_path = os.path.join(asset_dir, file_name)
-    relative_path = os.path.join(relative_asset_dir, file_name)
-    if not os.path.exists(file_path):
-        print('downloading %s to %s' % (link, relative_path))
-        r = requests.get(link)
-        print('downloaded %s' % link)
-        with open(file_path, 'wb') as asset:
-            asset.write(r.content)
-    return relative_path
-
 
 def get_file_name(url: str):
     short_url = url.split('?')[0]
@@ -61,28 +106,8 @@ def get_file_name(url: str):
     return file_name
 
 
-def process_assets(file_path: str, lines: List[Tuple[int, str]], asset_dir: str, relative_asset_dir: str):
-    content = update_markdown_content(asset_dir, file_path, lines, relative_asset_dir)
-    with open(file_path, 'w') as md:
-        md.write(''.join(content))
 
 
-def update_markdown_content(asset_dir, file_path, lines, relative_asset_dir):
-    if DEBUG:
-        print('updating %s' % file_path)
-    with open(file_path) as md:
-        content = md.readlines()
-        for number, line in lines:
-            link = link_from(line)
-            new_location = add_url_to_assets(link, asset_dir, relative_asset_dir)
-            content[number] = content[number].replace(link, new_location)
-    return content
-
-
-def process_files(assets_dir, assets_from_page_dir, vault_directory):
-    for subdir, dirs, files in os.walk(vault_directory):
-        for file in files:
-            process_file(assets_dir, assets_from_page_dir, file, subdir)
 
 
 def ensure_assets_dir_exists(assets_dir):
@@ -90,20 +115,6 @@ def ensure_assets_dir_exists(assets_dir):
         os.makedirs(assets_dir)
 
 
-def process_file(assets_dir, assets_from_page_dir, file, subdir):
-    if file.endswith('.md'):
-        file_path = os.path.join(subdir, file)
-        if DEBUG:
-            print('processing %s' % file_path)
-        with open(file_path, encoding='utf8') as md:
-            try:
-                numbered_lines = enumerate(line for line in md)
-            except:
-                print('could not read %s' % file_path)
-                sys.exit(-2)
-            lines = find_asset_references(numbered_lines)
-        if len(lines) > 0:
-            process_assets(file_path, lines, assets_dir, assets_from_page_dir)
 
 
 def find_asset_references(numbered_lines):
@@ -121,7 +132,6 @@ def main():
     vault_directory = sys.argv[1]
     if nargs == 3:
         DEBUG = True
-    print('migrating %s' % vault_directory)
 
 
 def print_usage():
