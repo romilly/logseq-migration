@@ -14,18 +14,22 @@ class DownloadFailedException(Exception):
 class Migrator:
     VERSION ='0.1.13'
 
-    def __init__(self, debug_level: int):
-        self.monitor = LoggingMonitor(debug_level)
+    def __init__(self, debug_level: int = 0, monitor = None):
+        if monitor is None:
+            monitor = LoggingMonitor(debug_level)
+        self.monitor = monitor
 
     def migrate(self, directory):
-        print(self.VERSION)
+        print('version %s' % self.VERSION)
         self.monitor.version(self.VERSION)
-        self.monitor.migrating(directory)
+        self.monitor.migrating(os.path.abspath(directory))
         relative_assets_dir = 'assets'
         assets_from_page_dir = os.path.join('..', relative_assets_dir)
         assets_dir = os.path.join(directory, relative_assets_dir)
         ensure_assets_dir_exists(assets_dir)
         self.process_files(assets_dir, assets_from_page_dir, directory)
+        self.monitor.done()
+        print('done')
 
 
     def process_files(self, assets_dir, assets_from_page_dir, vault_directory):
@@ -38,13 +42,13 @@ class Migrator:
         if file.endswith('.md'):
             file_path = os.path.join(subdir, file)
             self.monitor.processing(file_path)
-            with open(file_path, encoding='utf8') as md:
-                try:
+            try:
+                with open(file_path, encoding='utf8') as md:
                     numbered_lines = enumerate(line for line in md)
-                except UnicodeDecodeError as e:
-                    self.monitor.markdown_decode_error(file_path, e)
-                    return
-                lines = find_asset_references(numbered_lines)
+                    lines = find_asset_references(numbered_lines)
+            except Exception as e:
+                self.monitor.markdown_decode_error(file_path, e)
+                return
             if len(lines) > 0:
                 self.process_assets(file_path, lines,
                                     assets_dir,
@@ -145,7 +149,7 @@ def print_usage():
     sys.exit(3)
 
 
-def migrate(vault_directory: str, debug_level=0):
+def migrate(vault_directory: str, debug_level=1):
     Migrator(debug_level).migrate(vault_directory)
 
 

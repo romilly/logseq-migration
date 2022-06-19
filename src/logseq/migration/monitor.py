@@ -33,6 +33,9 @@ class LoggingMonitor:
     def download_failed(self, link, exception: Exception):
         logging.error('could not download %s - %s' % (link, str(exception)))
 
+    def done(self):
+        logging.info('run completed')
+
 
 
 

@@ -40,6 +40,9 @@ The code is written in Python, and you  will need an installed copy of Python3.8
 If you don't already have a suitable copy of Python installed, you'll find installation instructions
 [here](https://www.python.org/).
 
+Under Windows, it appears that you must install Python system-wide (with 
+script wrappers) and ask for Python to be added to your PATH.
+
 #### pip3
 
 `pip` is Python's package manager. You'll need `pip3`, the version that supports Python3.
@@ -57,7 +60,15 @@ run `localise_assets <vault_dir>`
 
 where `vault_dir` is the directory in which your `logseq` graph lives.
 
-You should see a list of the firebase urls and the asset file names as they are saved.
+You'll see version information printed, and the word `done` when the 
+migration is complete
+
+The migrator will create a logfile called `migration.log`.
+By default this will only log the start and end of the migration, with any 
+errors.
+
+If you wish to see detailed debug information,
+run `localise_assets <vault_dir> 1`
 
 The code is [idempotent](https://en.wikipedia.org/wiki/Idempotence).
 In other words, if you run it two or more times, nothing _should_ change after the first run.
