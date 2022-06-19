@@ -1,12 +1,33 @@
 import os
 import re
 import sys
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import requests
 
-# TODO: Horrid but quick, use a Migrator class and add a Monitor
 
 DEBUG = False
+
+
+class NullMonitor:
+    def print(self, param):
+        pass
+
+
+class Migrator:
+    def __init__(self, monitor: Optional[NullMonitor] = None):
+        if monitor == None:
+            monitor = NullMonitor()
+        self.monitor = monitor
+
+    def migrate(self, directory):
+        self.monitor.print('migrate version 0.1.13')
+        debug = 'On' if DEBUG else 'Off'
+        print('debug mode %s' % debug)
+        relative_assets_dir = 'assets'
+        assets_from_page_dir = os.path.join('..', relative_assets_dir)
+        assets_dir = os.path.join(directory, relative_assets_dir)
+        ensure_assets_dir_exists(assets_dir)
+        process_files(assets_dir, assets_from_page_dir, directory)
 
 
 def link_from(line):
@@ -58,17 +79,6 @@ def update_markdown_content(asset_dir, file_path, lines, relative_asset_dir):
     return content
 
 
-def migrate(directory):
-    print('migrate version 0.1.12')
-    debug = 'On' if DEBUG else 'Off'
-    print('debug mode %s' % debug)
-    relative_assets_dir = 'assets'
-    assets_from_page_dir = os.path.join('..', relative_assets_dir)
-    assets_dir = os.path.join(directory, relative_assets_dir)
-    ensure_assets_dir_exists(assets_dir)
-    process_files(assets_dir, assets_from_page_dir, directory)
-
-
 def process_files(assets_dir, assets_from_page_dir, vault_directory):
     for subdir, dirs, files in os.walk(vault_directory):
         for file in files:
@@ -112,7 +122,6 @@ def main():
     if nargs == 3:
         DEBUG = True
     print('migrating %s' % vault_directory)
-    migrate(vault_directory)
 
 
 def print_usage():
@@ -122,3 +131,8 @@ def print_usage():
 
 if __name__ == '__main__':
     main()
+
+
+def migrate(vault_directory: str):
+    migrator = Migrator()
+    migrator.migrate(vault_directory)

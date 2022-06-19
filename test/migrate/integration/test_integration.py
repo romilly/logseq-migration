@@ -25,7 +25,7 @@ def read(path):
         return f.read()
 
 
-class E2ETestCase(unittest.TestCase):
+class MigratorE2ETestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         if os.path.exists(TEST_GRAPH):
@@ -47,6 +47,7 @@ class E2ETestCase(unittest.TestCase):
         md = read(PATH3)
         assert_that(md, contains_string('../assets/README.pdf'))
         assert_that(os.path.exists(PDF))
+
 
 
 if __name__ == '__main__':
