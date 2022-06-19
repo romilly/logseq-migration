@@ -4,14 +4,14 @@ import subprocess
 import unittest
 from os.path import normpath as norm
 
-PATH = 'test/data/generated/logs'
+PATH = 'test/data/generated/'
 IMPORTED_GRAPH_NAME = 'test-vault'
 IMPORTED_VAULT = os.path.join('test/data/test/', IMPORTED_GRAPH_NAME)
 
 
 class MigratorE2E_TestCase(unittest.TestCase):
     def setUp(self) -> None:
-        self.delete_log_files()
+        self.delete_log_file()
         module_directory = os.path.dirname(__file__)
         # we're in test/prioritise/e2e, so go up two levels to test,
         # then down to data/generated
@@ -33,14 +33,14 @@ class MigratorE2E_TestCase(unittest.TestCase):
     def test_app_runs(self):
         self.assertEqual(0, self.result.returncode)
 
-    # def test_app_creates_log_file(self):
-    #     self.assertTrue(os.path.exists(PATH))
+    def test_app_creates_log_file(self):
+        self.assertTrue(os.path.exists(PATH))
 
 
-    def delete_log_files(self):
-        if os.path.exists(PATH):
-            for log in os.listdir(PATH):
-                os.remove(log)
+    def delete_log_file(self):
+        log_path = os.path.join(PATH, 'migration.log')
+        if os.path.exists(log_path):
+            os.remove(log_path)
 
 
 

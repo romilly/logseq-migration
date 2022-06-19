@@ -1,21 +1,15 @@
 import os
 import re
 import sys
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 import requests
 
-
-DEBUG = False
-
-
-class NullMonitor:
-    def print(self, param):
-        pass
+from logseq.migration.monitor import LoggingMonitor
 
 
 class Migrator:
-    def __init__(self, *monitors: NullMonitor):
-        self.monitors = monitors
+    def __init__(self, debug_level: int):
+        self.monitor = LoggingMonitor(debug_level)
 
     def migrate(self, directory):
         self.print('migrate version 0.1.13')
@@ -27,8 +21,7 @@ class Migrator:
         self.process_files(assets_dir, assets_from_page_dir, directory)
 
     def print(self, message: str):
-        for monitor in self.monitors:
-            monitor.print(message)
+        self.monitor.print(message)
 
     def process_files(self, assets_dir, assets_from_page_dir, vault_directory):
         for subdir, dirs, files in os.walk(vault_directory):
@@ -97,7 +90,6 @@ def link_from(line):
     return link.group(0)
 
 
-
 def get_file_name(url: str):
     short_url = url.split('?')[0]
     r = requests.get(short_url)
@@ -106,15 +98,9 @@ def get_file_name(url: str):
     return file_name
 
 
-
-
-
-
 def ensure_assets_dir_exists(assets_dir):
     if not os.path.exists(assets_dir):
         os.makedirs(assets_dir)
-
-
 
 
 def find_asset_references(numbered_lines):
@@ -122,16 +108,18 @@ def find_asset_references(numbered_lines):
                 number, line in numbered_lines if 'https://firebasestorage' in line)
 
 
-def main():
-    global  DEBUG # TODO: remove
-    nargs = len(sys.argv)
-    if 2 > nargs or 3 < nargs:
+def main(*args):
+    if len(args) == 0:
+        args = sys.argv[1:]
+    nargs = len(args)
+    if nargs < 1 or nargs > 2:
         print_usage()
-    if nargs == 3 and sys.argv[2] != 'debug':
-        print_usage()
-    vault_directory = sys.argv[1]
-    if nargs == 3:
-        DEBUG = True
+    if nargs == 2:
+        debug_level = int(args[1])
+    else:
+        debug_level = 0
+    vault_directory = args[0]
+    migrate(vault_directory, debug_level)
 
 
 def print_usage():
@@ -139,10 +127,10 @@ def print_usage():
     sys.exit(1)
 
 
+def migrate(vault_directory: str, debug_level=0):
+    Migrator(debug_level).migrate(vault_directory)
+
+
 if __name__ == '__main__':
     main()
 
-
-def migrate(vault_directory: str):
-    migrator = Migrator()
-    migrator.migrate(vault_directory)
