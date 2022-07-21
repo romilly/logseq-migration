@@ -2,6 +2,10 @@
 
 **Download and use local copies of assets in logseq after importing a file from roam**.
 
+
+**NB:** Users have reported problems running this on Windows. I have been unable to reproduce the problem, so I cannot 
+fixit. The software should run on any model of a Raspberry Pi so Windows users with a Pi should install and run the software there.
+
 Roam stores the assets (images, pdfs, mp4 files etc.) in the cloud.
 
 While `logseq` makes it easy for you to import a roam `json` export, your _assets_ will remain in the cloud.

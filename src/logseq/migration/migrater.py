@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import uuid
 from typing import List, Tuple
 import requests
 
@@ -114,7 +115,7 @@ def get_file_name(url: str):
     r = requests.get(short_url)
     json = r.json()
     file_name = json['metadata']['file-name']
-    return file_name
+    return file_name+'-%s' % uuid.uuid1()
 
 
 def ensure_assets_dir_exists(assets_dir):

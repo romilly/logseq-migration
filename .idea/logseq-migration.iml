@@ -11,6 +11,7 @@
       <excludeFolder url="file://$MODULE_DIR$/test/.pytest_cache/v" />
       <excludeFolder url="file://$MODULE_DIR$/src/logseq_migration.egg-info" />
       <excludeFolder url="file://$MODULE_DIR$/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/data" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.8 (logseq-migration)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
